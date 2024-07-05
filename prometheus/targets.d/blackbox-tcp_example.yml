@@ -1,4 +1,4 @@
 - targets:
-    - rbt-demo.lanta.me:9080
+    - lanta-net.ru:9080
   labels:
     alias: tcp-connect
