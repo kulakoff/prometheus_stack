@@ -1,0 +1,8 @@
+- targets:
+    - rbt-demo.lanta.me
+    - d9411.ru
+    - domfon.danpro.ru
+    - rbt.korvet.pro
+    - dom.a-home.biz
+  labels:
+    alias: http
