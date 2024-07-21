@@ -1,0 +1,33 @@
+groups:
+- name: test
+  rules:
+  - alert: PrometheusTargetMissing
+    expr: up == 0
+    for: 0m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Prometheus target missing (instance {{ $labels.instance }})"
+      description: "A Prometheus target has disappeared. An exporter might be crashed. VALUE = {{ $value }}  LABELS: {{ $labels }}"
+
+- name: icmp_checks
+  rules:
+  - alert: ICMPHostUnreachable
+    expr: probe_success{alias="ping"} == 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Host unreachable via ICMP (instance {{ $labels.instance }})"
+      description: "The host {{ $labels.instance }} is not reachable via ICMP for more than 5 minutes. VALUE = {{ $value }}  LABELS: {{ $labels }}"
+
+- name: intercom_restarted
+  rules:
+  - alert: HostRestarted
+    expr: sys_intercom_uptime_seconds < 900
+    for: 1m
+    labels:
+      severity: info
+    annotations:
+      summary: "Device has ben restarted (instance {{ $labels.instance }})"
+      description: "Intercom {{ $labels.instance }} was rebooted . VALUE = {{ $value }}  LABELS: {{ $labels }}"

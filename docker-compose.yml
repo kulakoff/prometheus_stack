@@ -62,7 +62,7 @@ services:
     depends_on:
       - prometheus
     ports:
-      - "3000:3000"
+      - "3030:3000"
     volumes:
       - ./grafana:/var/lib/grafana
       - ./grafana/provisioning/:/etc/grafana/provisioning/
@@ -73,6 +73,81 @@ services:
       - default
 
 
+# latest alert manager not support api v1      
+#  alertmanager:
+#    container_name: alertmanager
+#    hostname: alertmanager
+#    image: prom/alertmanager:latest
+#    user: root
+#    ports:
+#      - "127.0.0.1:9093:9093"
+#    volumes:
+#      - ./alertmanager/:/etc/alertmanager/
+#    environment:
+#      TZ: "Europe/Moscow"
+#    command:
+#      - '--config.file=/etc/alertmanager/config.yml'
+#      - '--storage.path=/etc/alertmanager/data'
+#    restart: unless-stopped
+#    networks:
+#      - default
+
+  alertmanager:
+    container_name: alertmanager
+    hostname: alertmanager
+#    image: prom/alertmanager:v0.16.0
+    image: prom/alertmanager:latest
+    user: root
+    ports:
+      - "127.0.0.1:9093:9093"
+    volumes:
+      - ./alertmanager/:/etc/alertmanager/
+    environment:
+      TZ: "Europe/Moscow"
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/etc/alertmanager/data'
+    restart: unless-stopped
+    networks:
+      - default
+
+  alertmanager-bot:
+    container_name: alertmanager-bot
+    hostname: alertmanager-bot
+    image: metalmatze/alertmanager-bot:latest
+    user: root
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./alertmanager-bot/data:/data
+    command:
+      - '--alertmanager.url=http://alertmanager:9093'
+      - '--log.level=debug'
+      - '--store=bolt'
+      - '--bolt.path=/data/bot.db'
+      - '--telegram.admin=${TELEGRAM_ADMIN}'
+      - '--telegram.token=${TELEGRAM_TOKEN}'
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Moscow"
+    networks:
+      - default
+
+  karma:
+    container_name: karma
+    hostname: karma
+    image: ubuntu/karma:0.120-22.04_stable
+#    image: ghcr.io/prymitive/karma
+    environment:
+      CONFIG_FILE: /config.yml
+      TZ: "Europe/Moscow"
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./karma/config.yml:/config.yml
+    networks:
+      - default
 
 networks:
   default:
