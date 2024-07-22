@@ -1,4 +1,5 @@
 .idea
+.env
 prometheus/targets.d/blackbox-icmp.yml
 prometheus/targets.d/blackbox-http.yml
 prometheus/targets.d/blackbox-tcp.yml
