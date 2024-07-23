@@ -31,3 +31,14 @@ groups:
     annotations:
       summary: "Device has ben restarted (instance {{ $labels.instance }})"
       description: "Intercom {{ $labels.instance }} was rebooted . VALUE = {{ $value }}  LABELS: {{ $labels }}"
+
+- name: intercom_sip_registration
+  rules:
+  - alert: SipClientOffline
+    expr: sys_intercom_sip_status == 0
+    for: 5m
+    labels:
+      severity: info
+    annotations:
+      summary: "SIP client not register (instance {{ $labels.instance }})"
+      description: "Intercom {{ $labels.instance }} VALUE = {{ $value }}  LABELS: {{ $labels }}"
