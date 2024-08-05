@@ -3,7 +3,7 @@ groups:
   rules:
   - alert: PrometheusTargetMissing
     expr: up == 0
-    for: 0m
+    for: 5m
     labels:
       severity: critical
     annotations:
@@ -21,6 +21,7 @@ groups:
       summary: "Host unreachable via ICMP (instance {{ $labels.instance }})"
       description: "The host {{ $labels.instance }} is not reachable via ICMP for more than 5 minutes. VALUE = {{ $value }}  LABELS: {{ $labels }}"
 
+# Alert for any restarted intercom and uptime < 900 seconds
 - name: intercom_restarted
   rules:
   - alert: HostRestarted
@@ -32,6 +33,7 @@ groups:
       summary: "Device has ben restarted (instance {{ $labels.instance }})"
       description: "Intercom {{ $labels.instance }} was rebooted . VALUE = {{ $value }}  LABELS: {{ $labels }}"
 
+# Alert for SIP registration offline on intercom
 - name: intercom_sip_registration
   rules:
   - alert: SipClientOffline
@@ -42,3 +44,14 @@ groups:
     annotations:
       summary: "SIP client not register (instance {{ $labels.instance }})"
       description: "Intercom {{ $labels.instance }} VALUE = {{ $value }}  LABELS: {{ $labels }}"
+
+# Alert for flussonic streams
+- name: flussonic_stream_bad_health
+  rules:
+  - alert: DvrStreamErr
+    expr: max_over_time(stream_retry_count[5m]) > 0
+    labels:
+      severity: info
+    annotations:
+      summary: "DVR stream name {{ $labels.name }} stream error"
+      description: "Server {{ $labels.instance }}  stream name {{ $labels.name }}  . VALUE = {{ $value }}  LABELS: {{ $labels }}"
