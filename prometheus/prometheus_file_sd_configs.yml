@@ -1,0 +1,131 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+# 'node-exporter'
+  - job_name: 'node'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['node-exporter:9100']
+
+#  'blackbox-icmp'
+  - job_name: 'blackbox-icmp'
+    scrape_interval: 30s
+    metrics_path: /probe
+    params:
+      module: [ icmp ]
+    relabel_configs:
+      - source_labels: [ __address__ ]
+        target_label: __param_target
+      - source_labels: [ __param_target ]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+    file_sd_configs:
+      - files:
+          - /etc/prometheus/targets.d/blackbox-icmp.yml
+
+#  'blackbox-http'
+  - job_name: 'blackbox-http'
+    scrape_interval: 30s
+    metrics_path: /probe
+    params:
+      module: [ http_2xx ]
+    relabel_configs:
+      - source_labels: [ __address__ ]
+        target_label: __param_target
+      - source_labels: [ __param_target ]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+    file_sd_configs:
+      - files:
+          - /etc/prometheus/targets.d/blackbox-http.yml
+
+#  'asterisk'
+  - job_name: 'asterisk'
+    scheme: https
+    scrape_interval: 30s
+    metrics_path: /metrics
+    static_configs:
+      - targets: [ 'rbt-demo.lanta.me:55458' ]
+    basic_auth:
+      username: 'prometheus'
+      password: 'prometheus'
+
+#  'blackbox-tcp'
+  - job_name: 'blackbox-tcp'
+    scrape_interval: 30s
+    metrics_path: /probe
+    params:
+      module: [ tcp_connect ]
+    relabel_configs:
+      - source_labels: [ __address__ ]
+        target_label: __param_target
+      - source_labels: [ __param_target ]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+    file_sd_configs:
+      - files:
+          - /etc/prometheus/targets.d/blackbox-tcp.yml
+
+#  'SmartYard-Server/domophone'
+  - job_name: 'SmartYard-Server/domophone'
+    scrape_interval: 5m
+## auth  custom exporter
+#    basic_auth:
+#      username: "username"
+#      password: "password_secure"
+    metrics_path: /probe
+    http_sd_configs:
+      - url: 'http://192.168.13.39:8876/internal/prometheus/targets_domophone'
+        refresh_interval: 5m
+    relabel_configs:
+      - source_labels: [ __address__ ]
+        target_label: __param_url
+      - source_labels: [ username ]
+        target_label: __param_username
+      - source_labels: [ password ]
+        target_label: __param_password
+      - source_labels: [ model ]
+        target_label: __param_model
+
+      - source_labels: [ __param_url ]
+        target_label: instance
+      - target_label: __address__
+        replacement: 192.168.13.39:9191
+
+#  'flussonic_server'
+  - job_name: 'flussonic_server config'
+    scheme: https
+    metrics_path: /streamer/api/v3/config
+    basic_auth:
+      username: 'username'
+      password: 'password'
+    params:
+      format: [ openmetrics ]
+    static_configs:
+      - targets: [ 'flussonic_server.com' ]
+
+#  'flussonic_streams'
+  - job_name: 'flussonic_streams'
+    scheme: https
+    metrics_path: /streamer/api/v3/streams
+    basic_auth:
+      username: 'username'
+      password: 'password'
+    params:
+      format: [ openmetrics ]
+    static_configs:
+      - targets: [ 'flussonic_server.com' ]
+
+rule_files:
+  - 'alert.rules'
+
+alerting:
+  alertmanagers:
+    - scheme: http
+      static_configs:
+        - targets:
+            - "alertmanager:9093"
