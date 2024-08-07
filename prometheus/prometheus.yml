@@ -107,7 +107,7 @@ scrape_configs:
     metrics_path: /streamer/api/v3/config
     basic_auth:
       username: 'username'
-      password: 'AhGhu3oo'
+      password: 'example'
     params:
       format: [ openmetrics ]
     static_configs:
@@ -119,11 +119,17 @@ scrape_configs:
     metrics_path: /streamer/api/v3/streams
     basic_auth:
       username: 'username'
-      password: 'AhGhu3oo'
+      password: 'example'
     params:
       format: [ openmetrics ]
     static_configs:
       - targets: [ 'rbt-demo.lanta.me:8443' ]
+
+  - job_name: 'process-exporter'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'process-exporter:9256' ]
+
 
 rule_files:
   - 'alert.rules'

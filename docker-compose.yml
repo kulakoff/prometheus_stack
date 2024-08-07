@@ -20,41 +20,6 @@ services:
     networks:
       - default
 
-  node-exporter:
-    container_name: exporter
-    hostname: exporter
-    image: prom/node-exporter:latest
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - '--path.procfs=/host/proc'
-      - '--path.rootfs=/rootfs'
-      - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
-    ports:
-      - "4291:9100"
-    restart: unless-stopped
-    environment:
-      TZ: "Europe/Moscow"
-    networks:
-      - default
-
-  blackbox-exporter:
-    hostname: blackbox-exporter
-    container_name: blackbox-exporter
-    image: prom/blackbox-exporter:latest
-    volumes:
-      - ./blackbox/:/config/
-    command:
-      - '--config.file=/config/blackbox.yml'
-    restart: unless-stopped
-    ports:
-        - "4215:9115"
-    networks:
-      - default
-
   grafana:
     container_name: grafana
     hostname: grafana
@@ -73,30 +38,10 @@ services:
     networks:
       - default
 
-
-# latest alert manager not support api v1      
-#  alertmanager:
-#    container_name: alertmanager
-#    hostname: alertmanager
-#    image: prom/alertmanager:latest
-#    user: root
-#    ports:
-#      - "127.0.0.1:9093:9093"
-#    volumes:
-#      - ./alertmanager/:/etc/alertmanager/
-#    environment:
-#      TZ: "Europe/Moscow"
-#    command:
-#      - '--config.file=/etc/alertmanager/config.yml'
-#      - '--storage.path=/etc/alertmanager/data'
-#    restart: unless-stopped
-#    networks:
-#      - default
-
   alertmanager:
     container_name: alertmanager
     hostname: alertmanager
-#    image: prom/alertmanager:v0.16.0
+    #    image: prom/alertmanager:v0.16.0
     image: prom/alertmanager:latest
     user: root
     ports:
@@ -138,7 +83,7 @@ services:
     container_name: karma
     hostname: karma
     image: ubuntu/karma:0.120-22.04_stable
-#    image: ghcr.io/prymitive/karma
+    #    image: ghcr.io/prymitive/karma
     environment:
       CONFIG_FILE: /config.yml
       TZ: "Europe/Moscow"
@@ -149,6 +94,82 @@ services:
       - ./karma/config.yml:/config.yml
     networks:
       - default
+
+  node-exporter:
+    container_name: exporter
+    hostname: exporter
+    image: prom/node-exporter:latest
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    ports:
+      - "4291:9100"
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Moscow"
+    networks:
+      - default
+
+  blackbox-exporter:
+    hostname: blackbox-exporter
+    container_name: blackbox-exporter
+    image: prom/blackbox-exporter:latest
+    volumes:
+      - ./blackbox/:/config/
+    command:
+      - '--config.file=/config/blackbox.yml'
+    restart: unless-stopped
+    ports:
+        - "4215:9115"
+    networks:
+      - default
+
+# latest alert manager not support api v1      
+#  alertmanager:
+#    container_name: alertmanager
+#    hostname: alertmanager
+#    image: prom/alertmanager:latest
+#    user: root
+#    ports:
+#      - "127.0.0.1:9093:9093"
+#    volumes:
+#      - ./alertmanager/:/etc/alertmanager/
+#    environment:
+#      TZ: "Europe/Moscow"
+#    command:
+#      - '--config.file=/etc/alertmanager/config.yml'
+#      - '--storage.path=/etc/alertmanager/data'
+#    restart: unless-stopped
+#    networks:
+#      - default
+
+# custom exporter?
+
+# process-exporter
+  process-exporter:
+    hostname: process-exporter
+    container_name: process-exporter
+    image: ncabatoff/process-exporter
+    ports:
+      - "9256:9256"
+    volumes:
+      - ./process-exporter:/config
+      - /proc:/host/proc:ro
+    command:
+      - '-procfs=/host/proc'
+      - '-config.path=/config/process-exporter.yml'
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Moscow"
+    networks:
+      - default
+
 
 networks:
   default:
