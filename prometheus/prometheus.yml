@@ -111,7 +111,7 @@ scrape_configs:
     params:
       format: [ openmetrics ]
     static_configs:
-      - targets: [ 'rbt-demo.lanta.me:8443' ]
+      - targets: [ 'example.com' ]
 
   - job_name: 'flussonic_streams'
     scrape_interval: 1m
@@ -123,7 +123,7 @@ scrape_configs:
     params:
       format: [ openmetrics ]
     static_configs:
-      - targets: [ 'rbt-demo.lanta.me:8443' ]
+      - targets: [ 'example.com' ]
 
   - job_name: 'process-exporter'
     scrape_interval: 5s
