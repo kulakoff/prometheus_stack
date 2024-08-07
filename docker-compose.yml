@@ -118,7 +118,7 @@ services:
     image: metalmatze/alertmanager-bot:latest
     user: root
     ports:
-      - '8080:8080'
+      - '4280:8080'
     volumes:
       - ./alertmanager-bot/data:/data
     command:
@@ -144,7 +144,7 @@ services:
       TZ: "Europe/Moscow"
     restart: unless-stopped
     ports:
-      - "4280:8080"
+      - "4282:8080"
     volumes:
       - ./karma/config.yml:/config.yml
     networks:
