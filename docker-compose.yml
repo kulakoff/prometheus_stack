@@ -7,6 +7,7 @@ services:
     image: prom/prometheus:latest
     volumes:
       - ./prometheus:/etc/prometheus/
+      - prometheus_data:/prometheus
     ports:
       - "4290:9090"
     restart: unless-stopped
@@ -170,6 +171,8 @@ services:
     networks:
       - default
 
+volumes:
+  prometheus_data:
 
 networks:
   default:
