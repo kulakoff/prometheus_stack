@@ -22,7 +22,7 @@ services:
       - default
 
   prometheus_feature:
-    container_name: prometheus
+    container_name: prometheus_feature
     hostname: prometheus
     image: prom/prometheus:latest
     volumes:
