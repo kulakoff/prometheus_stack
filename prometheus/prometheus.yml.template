@@ -1,0 +1,32 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'blackbox-icmp'
+    scrape_interval: 30s
+    metrics_path: /probe
+    params:
+      module: [ icmp ]
+    relabel_configs:
+      - source_labels: [ __address__ ]
+        target_label: __param_target
+      - source_labels: [ __param_target ]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+    http_sd_configs:
+      - url: 'http://192.168.13.39:8876/internal/prometheus/targets_icmp'
+        refresh_interval: 5m
+        bearer_token: "${BEARER_TOKEN_ICMP}"
+
+  - job_name: 'asterisk'
+    scheme: https
+    scrape_interval: 30s
+    metrics_path: /metrics
+    static_configs:
+      - targets: [ 'rbt-demo.lanta.me:55458' ]
+    basic_auth:
+      username: '${ASTERISK_USERNAME}'
+      password: '${ASTERISK_PASSWORD}'
+
+  # остальные задания
