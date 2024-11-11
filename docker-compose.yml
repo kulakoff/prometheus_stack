@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.8'
 
 services:
   prometheus:
@@ -24,20 +24,30 @@ services:
   prometheus_feature:
     container_name: prometheus_feature
     hostname: prometheus
-    image: prom/prometheus:latest
+#    image: prom/prometheus:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
       - ./prometheus:/etc/prometheus/
-      - prometheus_data:/prometheus
+      - ./start-prometheus.sh:/start-prometheus.sh
+#      - prometheus_data:/prometheus
     ports:
-      - "4290:9090"
+      - "4299:9090"
     restart: unless-stopped
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--web.config.file=/etc/prometheus/web.yml'
-      - '--web.enable-admin-api'
-      - '--web.enable-lifecycle'
+    entrypoint: /bin/sh -c "apt-get update && apt-get install -y gettext && /start-prometheus.sh"
+    #    command:
+#      - '--config.file=/etc/prometheus/prometheus.yml'
+#      - '--web.config.file=/etc/prometheus/web.yml'
+#      - '--web.enable-admin-api'
+#      - '--web.enable-lifecycle'
     environment:
       TZ: "Europe/Moscow"
+      RBT_SERVICE_DISCOVERY_BASE_URI: "${RBT_SERVICE_DISCOVERY_BASE_URI}"
+      RBT_SERVICE_DISCOVERY_TOKEN: "${RBT_SERVICE_DISCOVERY_TOKEN}"
+      RBT_ASTERISK_URI: "${RBT_ASTERISK_URI}"
+      RBT_ASTERISK_USERNAME: "${RBT_ASTERISK_USERNAME}"
+      RBT_ASTERISK_PASSWORD: "${RBT_ASTERISK_PASSWORD}"
     networks:
       - default
 
