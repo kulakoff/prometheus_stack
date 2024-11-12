@@ -43,7 +43,7 @@ scrape_configs:
       - target_label: __address__
         replacement: blackbox-exporter:9115
     http_sd_configs:
-      - url: 'http://192.168.13.39:8876/internal/prometheus/targets_http'
+      - url: '${RBT_SERVICE_DISCOVERY_BASE_URI}/internal/prometheus/targets_http'
         refresh_interval: 5m
         bearer_token: '${RBT_SERVICE_DISCOVERY_TOKEN}'
 
@@ -72,8 +72,8 @@ scrape_configs:
     static_configs:
       - targets: [ '${RBT_ASTERISK_URI}' ]
     basic_auth:
-      username: 'RBT_ASTERISK_USERNAME'
-      password: 'RBT_ASTERISK_PASSWORD'
+      username: '${RBT_ASTERISK_USERNAME}'
+      password: '${RBT_ASTERISK_PASSWORD}'
 
 #  'SmartYard-Server/domophone'
   - job_name: 'SmartYard-Server/domophone'
@@ -84,9 +84,9 @@ scrape_configs:
 #      password: "password_secure"
     metrics_path: /probe
     http_sd_configs:
-      - url: 'http://192.168.13.39:8876/internal/prometheus/targets_domophone'
+      - url: '${RBT_SERVICE_DISCOVERY_BASE_URI}/internal/prometheus/targets_domophone'
         refresh_interval: 5m
-        bearer_token: EXAMPLE_TOKEN
+        bearer_token: '${RBT_SERVICE_DISCOVERY_TOKEN}'
     relabel_configs:
       - source_labels: [ __address__ ]
         target_label: __param_url
