@@ -80,8 +80,8 @@ scrape_configs:
     scrape_interval: 5m
 ## auth custom exporter
 #    basic_auth:
-#      username: "username"
-#      password: "password_secure"
+#      username: "${RBT_EXPORTER_USERNAME}"
+#      password: "${RBT_EXPORTER_PASSWORD}"
     metrics_path: /probe
     http_sd_configs:
       - url: '${RBT_SERVICE_DISCOVERY_BASE_URI}/internal/prometheus/targets_domophone'
@@ -99,37 +99,36 @@ scrape_configs:
       - source_labels: [ __param_url ]
         target_label: instance
       - target_label: __address__
-        replacement: 192.168.13.39:9191
+        replacement: '${RBT_EXPORTER_URI}'
 
   - job_name: 'flussonic_server'
     scrape_interval: 1m
     scheme: https
     metrics_path: /streamer/api/v3/config
     basic_auth:
-      username: 'username'
-      password: 'example'
+      username: '${RBT_FLUSSONIC_USERNAME}'
+      password: '${RBT_FLUSSONIC_PASSWORD}'
     params:
       format: [ openmetrics ]
     static_configs:
-      - targets: [ 'example.com' ]
+      - targets: [ '${RBT_FLUSSONIC_URI}' ]
 
   - job_name: 'flussonic_streams'
     scrape_interval: 1m
     scheme: https
     metrics_path: /streamer/api/v3/streams
     basic_auth:
-      username: 'username'
-      password: 'example'
+          username: '${RBT_FLUSSONIC_USERNAME}'
+          password: '${RBT_FLUSSONIC_PASSWORD}'
     params:
       format: [ openmetrics ]
     static_configs:
-      - targets: [ 'example.com' ]
+      - targets: [ '${RBT_FLUSSONIC_URI}' ]
 
   - job_name: 'process-exporter'
     scrape_interval: 5s
     static_configs:
       - targets: [ 'process-exporter:9256' ]
-
 
 rule_files:
   - 'alert.rules'
