@@ -15,11 +15,6 @@ services:
       - "4290:9090"
     restart: unless-stopped
     entrypoint: /bin/sh -c "apt-get update && apt-get install -y gettext && /start-prometheus.sh"
-    #    command:
-#      - '--config.file=/etc/prometheus/prometheus.yml'
-#      - '--web.config.file=/etc/prometheus/web.yml'
-#      - '--web.enable-admin-api'
-#      - '--web.enable-lifecycle'
     environment:
       TZ: "Europe/Moscow"
     env_file:

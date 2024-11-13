@@ -1,7 +1,14 @@
 .idea
 .env
+
+#prometheus
+/prometheus/prometheus.yml
 prometheus/targets.d/blackbox-icmp.yml
 prometheus/targets.d/blackbox-http.yml
 prometheus/targets.d/blackbox-tcp.yml
+
+#grafana
 grafana/
 !grafana/readme.md
+
+
