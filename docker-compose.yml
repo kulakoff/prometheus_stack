@@ -21,6 +21,7 @@ services:
       - .env
     networks:
       - default
+      - shared-network-dev
 
   grafana:
     container_name: grafana
@@ -181,3 +182,6 @@ networks:
       driver: default
       config:
         - subnet: "${PROMETHEUS_STACK_NETWORK}"
+
+  shared-network-dev:
+    external: true
