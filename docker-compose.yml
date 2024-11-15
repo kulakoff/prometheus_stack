@@ -180,4 +180,4 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 172.28.28.0/24
+        - subnet: "${PROMETHEUS_STACK_NETWORK}"
