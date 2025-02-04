@@ -1,4 +1,0 @@
-- targets:
-    - lanta-net.ru:9080
-  labels:
-    alias: tcp-connect
