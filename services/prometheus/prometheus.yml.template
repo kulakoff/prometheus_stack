@@ -131,7 +131,8 @@ scrape_configs:
       - targets: [ 'process-exporter:9256' ]
 
 rule_files:
-  - 'alert.rules'
+  - 'rules/alert_rules.yml'
+  - 'rules/*.yml'
 
 alerting:
   alertmanagers:
