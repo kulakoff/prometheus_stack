@@ -2,14 +2,15 @@
 .env
 
 #prometheus
-/prometheus/prometheus.yml
-prometheus/draft
-prometheus/targets.d/blackbox-icmp.yml
-prometheus/targets.d/blackbox-http.yml
-prometheus/targets.d/blackbox-tcp.yml
+services/prometheus/prometheus.yml
+services/prometheus/draft
+services/prometheus/targets.d/blackbox-icmp.yml
+services/prometheus/targets.d/blackbox-http.yml
+services/prometheus/targets.d/blackbox-tcp.yml
+
+#alertmanager
+services/alertmanager/data
 
 #grafana
-grafana/
-!grafana/readme.md
-
-
+/services/grafana/
+!/services/grafana/readme.md
