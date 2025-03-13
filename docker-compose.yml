@@ -6,10 +6,10 @@ services:
     hostname: prometheus
     build:
       context: .
-      dockerfile: _docker/prometheus/Dockerfile
+      dockerfile: docker/prometheus/Dockerfile
     volumes:
       - ./services/prometheus:/etc/prometheus/
-      - ./_docker/prometheus/start-prometheus.sh:/start-prometheus.sh
+      - ./docker/prometheus/start-prometheus.sh:/start-prometheus.sh
       - prometheus_data:/prometheus
     ports:
       - "4290:9090"
