@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   prometheus:
     container_name: prometheus
@@ -162,7 +160,7 @@ services:
     ports:
       - "9256:9256"
     volumes:
-      - ./process-exporter:/config
+      - ./services/process-exporter:/config
       - /proc:/host/proc:ro
     command:
       - '-procfs=/host/proc'
