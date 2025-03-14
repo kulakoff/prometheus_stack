@@ -66,9 +66,9 @@ scrape_configs:
 
 #  'asterisk'
   - job_name: 'asterisk'
-    scheme: https
+    scheme: http
     scrape_interval: 30s
-    metrics_path: /metrics
+    metrics_path: '${RBT_ASTERISK_METRICS_PATH}'
     static_configs:
       - targets: [ '${RBT_ASTERISK_URI}' ]
     basic_auth:
